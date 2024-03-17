@@ -10,7 +10,6 @@ router.post("/signup", async (req, res) => {
   const body = { ...req.body };
 
   body.password = await hashPassword(body.password);
-  console.log(body);
 
   const db = await mongo();
   const collection = db.collection("users");

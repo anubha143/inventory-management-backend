@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "category": { "type": "string" },
+    "quantity": { "type": "number" },
+    "cost_per_unit": { "type": "number" },
+    "unit_size": { "type": "number" }
+  },
+  "required": [
+    "name",
+    "description",
+    "category",
+    "quantity",
+    "cost_per_unit",
+    "unit_size"
+  ],
+  "additionalProperties": false
+}
+
+

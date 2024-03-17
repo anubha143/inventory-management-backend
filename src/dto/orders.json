@@ -1,0 +1,23 @@
+{
+    "type": "object",
+    "properties": {
+      "quantity": { "type": "number" },
+      "customer_name": { "type": "string" },
+      "customer_phone_number": { "type": "string", "pattern": "^\\d{10}$" },
+      "customer_email_address": { "type": "string", "format": "email" },
+      "customer_address": {
+        "type": "object",
+        "properties": {
+          "city": { "type": "string" },
+          "state": { "type": "string" },
+          "pincode": { "type": "number" },
+          "street_address_line1": { "type": "string" },
+          "street_address_line2": { "type": "string" },
+          "landmark": { "type": "string" }
+        },
+        "required": ["city", "state", "pincode", "street_address_line1"]
+      }
+    },
+    "required": ["quantity", "customer_name", "customer_phone_number", "customer_email_address", "customer_address"]
+  }
+  

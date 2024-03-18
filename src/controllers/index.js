@@ -3,6 +3,7 @@ const productController = require("./products");
 const orderController = require("./orders");
 const authHandler = require("./authentication");
 const authentication = require("../middlewares/authentication");
+const authorization = require("../middlewares/authorization");
 
 const router = Router();
 
@@ -29,7 +30,7 @@ publicRoutes.forEach((route) => {
 });
 
 privateRoutes.forEach((route) => {
-  router.use(route.path, authentication, route.contoller);
+  router.use(route.path, [authentication, authorization], route.contoller);
 });
 
 module.exports = router;

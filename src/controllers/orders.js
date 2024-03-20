@@ -26,9 +26,16 @@ router.post("/:id/cancel", async (req, res) => {
   const coll = db.collection("orders");
   const order = await coll.updateOne(
     { _id: new ObjectId(req.params.id) },
-    { $set: { status: "Canceled" } }
+    { $set: { status: "Cancelled" } }
   );
   res.status(201).send(order);
+  publishEvents({
+    type: "order-cancelled",
+    data: {
+      id: req.params.id,
+      status: "Canceled",
+    },
+  });
 });
 
 // Admin, Driver
@@ -40,6 +47,13 @@ router.post("/:id/in-transit", async (req, res) => {
     { $set: { status: "In-Transit" } }
   );
   res.status(201).send(order);
+  publishEvents({
+    type: "order-in-transit",
+    data: {
+      id: req.params.id,
+      status: "InTransit",
+    },
+  });
 });
 
 // Admin, Driver
@@ -51,6 +65,13 @@ router.post("/:id/delivered", async (req, res) => {
     { $set: { status: "Delivered" } }
   );
   res.status(201).send(order);
+  publishEvents({
+    type: "order-delivered",
+    data: {
+      id: req.params.id,
+      status: "Delivered",
+    },
+  });
 });
 
 module.exports = router;

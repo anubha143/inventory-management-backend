@@ -6,6 +6,7 @@ const addFormats = require("ajv-formats");
 const Ajv = require("ajv");
 const schema_product = require("../dto/products.json");
 const schema_order_product = require("../dto/orders.json");
+const publishEvent = require("../libs/publishEvents");
 const ajv = new Ajv({ allErrors: true });
 addFormats(ajv);
 const validate_product = ajv.compile(schema_product);
@@ -89,14 +90,20 @@ router.post("/:id/order", async (req, res) => {
 
     const order = { ...req.body, productId, total_cost, status: "Scheduled" };
 
-    await Promise.all([
+    const [insertOrderResult, updateOrderResult] = await Promise.all([
       orderCollection.insertOne(order),
       productCollection.updateOne(
         { _id: new ObjectId(productId) },
         { $set: { quantity: product.quantity - req.body.quantity } }
       ),
     ]);
-
+    publishEvent({
+      type: "order-placed",
+      data: {
+        id: insertOrderResult.insertedId,
+        status: "Scheduled",
+      },
+    });
     return res.status(200).send(order);
   } else {
     res.status(400).send(validate_order_product.errors);

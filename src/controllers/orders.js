@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const mongo = require("../dao/mongo");
 const { ObjectId } = require("mongodb");
+const publishEvent = require("../libs/publishEvents");
 
 const router = Router();
 
@@ -29,7 +30,7 @@ router.post("/:id/cancel", async (req, res) => {
     { $set: { status: "Cancelled" } }
   );
   res.status(201).send(order);
-  publishEvents({
+  publishEvent({
     type: "order-cancelled",
     data: {
       id: req.params.id,
@@ -47,7 +48,7 @@ router.post("/:id/in-transit", async (req, res) => {
     { $set: { status: "In-Transit" } }
   );
   res.status(201).send(order);
-  publishEvents({
+  publishEvent({
     type: "order-in-transit",
     data: {
       id: req.params.id,
@@ -65,7 +66,7 @@ router.post("/:id/delivered", async (req, res) => {
     { $set: { status: "Delivered" } }
   );
   res.status(201).send(order);
-  publishEvents({
+  publishEvent({
     type: "order-delivered",
     data: {
       id: req.params.id,
